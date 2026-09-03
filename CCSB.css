@@ -233,7 +233,7 @@ html { background-color: #8B5E3C; }
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: -1;
+    z-index: 0;
 }
 
 .hero-bg {
