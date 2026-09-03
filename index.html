@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rafael y Juana - Invitación de Boda</title>
+    <link rel="preload" as="image" href="boda-imagen.jpg">
+    <link rel="stylesheet" href="CCSB.css">
+    <script src="https://cdn.lordicon.com/lordicon.js"></script>
+    <style>
+        /* Carrusel: 3 imágenes simultáneamente con foto central destacada */
+        .carousel-track-container {
+            overflow: hidden;
+            width: 100%;
+            position: relative;
+        }
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease;
+            width: 100%;
+            overflow: visible;
+        }
+        .carousel-item {
+            flex: 0 0 33.333%; /* 3 imágenes por fila en PC */
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0; /* usamos gap del track para separación */
+        }
+        .carousel-item img {
+            max-width: 100%;
+            height: 100% !important;
+            object-fit: cover;
+            border-radius: 0;
+            box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        /* Hacer las fotos visualmente menos anchas manteniendo 3 por fila */
+        .framed-photo {
+            width: 90% !important;
+            height: 100% !important;
+            margin: 0 auto;
+            object-fit: cover !important;
+            background: #8B5E3C !important;
+            border: 10px solid #1F1F1F !important;
+            border-bottom-width: 38px !important;
+        }
+
+        @media (min-width: 769px) {
+            .carousel-item.is-center .framed-photo {
+                transform: scale(1.12) rotate(-0.2deg);
+                box-shadow: 0 34px 68px rgba(0,0,0,0.4);
+            }
+        }
+        
+        /* Mobile: una imagen centrada */
+        @media (max-width: 768px) {
+            .carousel-item {
+                flex: 0 0 100% !important; /* 1 imagen por vista en móvil */
+                padding: 0 6px !important;
+                height: 380px !important;
+                display: flex !important;
+                justify-content: center !important;
+                align-items: center !important;
+            }
+            .carousel-item img {
+                width: 100% !important;
+                height: 100% !important;
+                max-height: 380px !important;
+                object-fit: cover !important;
+                transform: none !important;
+            }
+            .framed-photo {
+                width: 100% !important;
+                border-width: 6px !important;
+                border-bottom-width: 20px !important;
+            }
+            
+            .carousel-track-container {
+                height: auto !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .carousel-item img {
+                max-height: 320px !important;
+                height: 300px !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                object-fit: cover !important;
+                border-radius: 0;
+                transform: none !important;
+            }
+            .framed-photo {
+                width: 100% !important;
+                border-width: 4px !important;
+                border-bottom-width: 14px !important;
+            }
+            
+            .carousel-item {
+                flex: 0 0 100% !important;
+                padding: 0 8px !important;
+                height: 320px !important;
+            }
+            
+            .carousel-track-container {
+                height: auto !important;
+            }
+        }
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #fff;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 2;
+            padding: 0 10px;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        /* Ajuste temporal: mantener altura visible sin tocar el attachment */
+        @media (min-width: 1025px) {
+            .hero-section {
+                background-image: url('boda-imagen.jpg') !important;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="main-center">
+        <!-- Modal de Bienvenida -->
+        <div id="welcomeModal" class="modal-overlay">
+            <div class="welcome-hero">
+                <h1 class="welcome-title">Bienvenidos a la<br/>invitación de Rafael y<br/>Juana</h1>
+                <p class="welcome-note">La música de fondo es parte de la experiencia</p>
+                <div class="welcome-actions">
+                    <button id="enterWithMusic" class="btn-gold" onclick="enterWithMusicClick()">Ingresar con música</button>
+                    <button id="enterWithoutMusic" class="btn-gold-outline" onclick="enterWithoutMusicClick()">Ingresar sin música</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reproductor de música -->
+        <div id="musicPlayer" class="music-player" style="display: none;">
+            <button id="musicToggle" class="music-button modern-icon" title="Reproducir/Pausar música">
+                <svg id="volumeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="#222" stroke="#fff" stroke-width="1"></polygon>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.08" stroke="#222" stroke-width="2"></path>
+                    <circle cx="6.5" cy="12" r="1" fill="#ffe27a"/>
+                </svg>
+            </button>
+            <div id="youtube-player" style="position: absolute; top: -9999px; left: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none;"></div>
+        </div>
+
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <img class="hero-bg" src="boda-imagen.jpg" alt="Portada boda Rafael y Juana">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <div class="hero-text">
+                    <div class="date">31.12.2026</div>
+                    <h1 class="names">Rafael <span class="ampersand">y</span> Juana</h1>
+                    <blockquote class="quote">
+                        "Todos somos mortales,<br />
+                        hasta el primer beso y la segunda copa de vino"
+                    </blockquote>
+                    <div class="scroll-indicator">
+                        <div class="scroll-mouse">
+                            <div class="scroll-wheel"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+        <!-- Countdown -->
+        <section class="countdown-section">
+            <h2 class="section-title">Falta</h2>
+            <div class="countdown-container">
+                <div class="countdown-item">
+                    <div class="countdown-number" id="days">00</div>
+                    <div class="countdown-label">DÍAS</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-number" id="hours">00</div>
+                    <div class="countdown-label">HORAS</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-number" id="minutes">00</div>
+                    <div class="countdown-label">MINUTOS</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-number" id="seconds">00</div>
+                    <div class="countdown-label">SEGUNDOS</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ceremony & Celebration -->
+        <section class="events-section">
+            <div class="events-container">
+                <!-- Ceremony -->
+                <div class="event-card">
+                    <div class="event-icon modern-icon">
+                        <lord-icon
+                            src="https://cdn.lordicon.com/fshosubk.json"
+                            trigger="loop"
+                            colors="primary:#c79816,secondary:#c79816"
+                            style="width:110px;height:110px">
+                        </lord-icon>
+                    </div>
+                    <h3 class="event-title">Ceremonia</h3>
+                    <div class="event-details">
+                        <h4>Día</h4>
+                        <p>Jueves 31 de Diciembre - 10hs</p>
+                    </div>
+                    <div class="event-details">
+                        <h4>Lugar</h4>
+                        <p>Parroquia Nuestra Señora de Luján</p>
+                        <p class="event-address">Av. Pergamino 203 - Santo Domingo</p>
+                    </div>
+                    <button class="btn-wedding" onclick="openLocation('ceremony')">¿Cómo llegar?</button>
+                </div>
+
+                <!-- Celebration -->
+                <div class="event-card">
+                    <div class="event-icon modern-icon">
+                        <lord-icon
+                            src="https://cdn.lordicon.com/ohcuigqh.json"
+                            trigger="loop"
+                            colors="primary:#c79816,secondary:#c79816"
+                            style="width:110px;height:110px">
+                        </lord-icon>
+                    </div>
+                    <h3 class="event-title">Celebración</h3>
+                    <div class="event-details">
+                        <h4>Día</h4>
+                        <p>Jueves 31 de Diciembre - 20hs</p>
+                    </div>
+                    <div class="event-details">
+                        <h4>Lugar</h4>
+                        <p>Salón de fiestas Avril</p>
+                        <p class="event-address">Av. Los Reartes 12 - Santo Domingo</p>
+                    </div>
+                    <button class="btn-wedding" onclick="openLocation('celebration')">¿Cómo llegar?</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Photo Gallery -->
+        <section class="gallery-section">
+            <div class="gallery-container">
+                <h2 class="section-title">Retratos de Nuestro Amor</h2>
+                <p class="section-subtitle">Un minuto, un segundo, un instante que queda en la eternidad</p>
+                
+                <div class="camera-icon modern-icon">
+                    <lord-icon
+                        src="https://cdn.lordicon.com/wsaaegar.json"
+                        trigger="loop"
+                        colors="primary:#c79816,secondary:#c79816"
+                        style="width:110px;height:110px">
+                    </lord-icon>
+                </div>
+                <!-- Carrusel -->
+                <div class="carousel-container">
+                  <button class="carousel-btn carousel-prev" id="prevBtn">❮</button>
+                  <div class="carousel-track-container">
+                    <div class="carousel-track" id="carouselTrack">
+                      <div class="carousel-item">
+                        <img class="framed-photo" src="https://i.ibb.co/dsPdPzTn/boda-brasilera.jpg" alt="Rafael y Juana en la boda">
+                      </div>
+                      <div class="carousel-item">
+                        <img class="framed-photo" src="https://i.ibb.co/0jsGr4j7/freecompress-27.jpg" alt="Rafael y Juana">
+                      </div>
+                      <div class="carousel-item">
+                        <img class="framed-photo" src="https://i.ibb.co/6JDLH0TN/photo-1606216836560-25cf33c04b0d.avif" alt="Rafael y Juana">
+                      </div>
+                      <div class="carousel-item">
+                        <img class="framed-photo" src="https://i.ibb.co/wh1fsg71/81d611e7072ace312870228e61ee28d1.jpg" alt="Rafael y Juana">
+                      </div>
+                      <div class="carousel-item">
+                        <img class="framed-photo" src="https://i.ibb.co/jvMGh2MJ/63941e1d14ca1.jpg" alt="Rafael y Juana">
+                      </div>
+                      <div class="carousel-item">
+                        <img class="framed-photo" src="https://i.ibb.co/pjtRqPX4/novios-amigos.jpg" alt="Rafael y Juana con amigos">
+                      </div>
+                    </div>
+                  </div>
+                  <button class="carousel-btn carousel-next" id="nextBtn">❯</button>
+                </div>
+
+                <div class="carousel-counter">
+                  <span id="currentSlide">1</span> / <span id="totalSlides">6</span> fotos
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Party Information -->
+        <section class="party-section">
+            <div class="party-container">
+                <h2 class="section-title">Fiesta</h2>
+                <p class="section-subtitle">Hagamos juntos una fiesta épica. Aquí algunos detalles a tener en cuenta.</p>
+
+                <div class="party-grid">
+                    <div class="party-card">
+                        <div class="party-icon modern-icon">
+                            <lord-icon
+                                src="https://cdn.lordicon.com/dedkryhs.json"
+                                trigger="loop"
+                                colors="primary:#c79816,secondary:#c79816"
+                                style="width:110px;height:110px">
+                            </lord-icon>
+                        </div>
+                        <h3>Música</h3>
+                        <p>¿Cuál es la canción que no debe faltar en la PlayList de la fiesta?</p>
+                        <button class="btn-wedding" onclick="suggestMusic()">Sugerir canción</button>
+                    </div>
+
+                    <div class="party-card">
+                        <div class="party-icon modern-icon bowtie-icon">
+                            <svg width="110" height="110" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4 24 L24 32 L4 40 Z" fill="#c79816"/>
+                                <rect x="28" y="26" width="8" height="12" rx="2" fill="#e2b847"/>
+                                <path d="M60 24 L40 32 L60 40 Z" fill="#c79816"/>
+                                <circle cx="32" cy="32" r="3" fill="#c79816"/>
+                            </svg>
+                        </div>
+                        <h3>Dress Code</h3>
+                        <p>Una orientación para tu vestuario</p>
+                        <button class="btn-wedding" onclick="showDressCode()">Ver más</button>
+                    </div>
+
+                    <div class="party-card">
+                        <div class="party-icon modern-icon">
+                            <lord-icon
+                                src="https://cdn.lordicon.com/exymduqj.json"
+                                trigger="loop"
+                                colors="primary:#c79816,secondary:#c79816"
+                                style="width:110px;height:110px">
+                            </lord-icon>
+                        </div>
+                        <h3>Tips y Notas</h3>
+                        <p>Información adicional para tener en cuenta</p>
+                        <button class="btn-wedding" onclick="showTips()">+ Info</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gifts -->
+        <section class="gifts-section">
+            <div class="gifts-container">
+                <h2 class="section-title">Regalos</h2>
+                <p class="section-subtitle">Si deseas regalarnos algo más que tu hermosa presencia.</p>
+                
+                <div class="gift-icon modern-icon">
+                    <lord-icon
+                        src="https://cdn.lordicon.com/kezeezyg.json"
+                        trigger="loop"
+                        colors="primary:#c79816,secondary:#c79816"
+                        style="width:110px;height:110px">
+                    </lord-icon>
+                </div>
+
+                <button class="btn-wedding" onclick="showGifts()">Ver más</button>
+            </div>
+        </section>
+
+        <!-- RSVP -->
+        <section class="rsvp-section">
+            <div class="rsvp-container">
+                <h2 class="section-title">Confirma tu Asistencia</h2>
+                <p class="section-subtitle">Comparte este hermoso momento con nosotros</p>
+                
+                <div class="whatsapp-icon modern-icon">
+                    <lord-icon
+                        src="https://cdn.lordicon.com/dnphlhar.json"
+                        trigger="loop"
+                        colors="primary:#545454,secondary:#109173"
+                        style="width:80px;height:80px">
+                    </lord-icon>
+                </div>
+
+                <button class="btn-wedding" onclick="confirmAttendance()">Confirmar Asistencia</button>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>Con amor,</p>
+                <h3>Rafael y Juana</h3>
+                <p class="footer-date">31 de Diciembre, 2026</p>
+            </div>
+        </footer>
+        </div>
+
+        <!-- Toast notification -->
+        <div id="toast" class="toast">
+            <div id="toastContent"></div>
+        </div>
+
+        <script>
+        (function() {
+            try {
+                if ('caches' in window) {
+                    caches.keys().then(keys => keys.forEach(k => caches.delete(k))).catch(() => {});
+                }
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister())).catch(() => {});
+                }
+            } catch(e) {}
+        })();
+        </script>
+        <script src="JAVAB.js?v=18" defer></script>
+</body>
+</html>
