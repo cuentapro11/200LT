@@ -25,9 +25,33 @@ function enterWithMusicClick() {
         player.playVideo();
         isPlaying = true;
         updateMusicIcon();
+        // Refuerzo para iOS Safari: a veces el primer playVideo() no alcanza
+        // a "engancharse" al gesto del usuario dentro del iframe de YouTube.
+        // Reintentamos de forma inmediata, todavía dentro del mismo gesto.
+        retryPlayForIOS();
     }
     // Si el player todavía no está listo (conexión lenta), onPlayerReady se
     // encarga de reproducir apenas termine de inicializar.
+}
+
+// Reintenta playVideo() un par de veces muy cerca en el tiempo del click
+// original. En iOS Safari, el control del iframe de YouTube vía postMessage
+// a veces no cuenta como "gesto real" en el primer intento; repetir el
+// llamado dentro de los primeros milisegundos del mismo gesto mejora mucho
+// la tasa de éxito sin agregar un botón adicional de "tocar para reproducir".
+function retryPlayForIOS() {
+    if (!player) return;
+    [50, 200, 600].forEach(delay => {
+        setTimeout(() => {
+            if (player && typeof player.getPlayerState === 'function') {
+                const state = player.getPlayerState();
+                // 1 = reproduciendo. Si no está reproduciendo, reintentamos.
+                if (state !== 1) {
+                    player.playVideo();
+                }
+            }
+        }, delay);
+    });
 }
 
 function enterWithoutMusicClick() {
@@ -62,6 +86,7 @@ function setupModalButtons() {
                 player.playVideo();
                 isPlaying = true;
                 updateMusicIcon();
+                retryPlayForIOS();
             }
         };
     }
@@ -117,8 +142,8 @@ function initializeYouTubePlayer() {
     if (player) return; // ya inicializado, evita crear el player dos veces
 
     player = new YT.Player('youtube-player', {
-        height: '1',
-        width: '1',
+        height: '2',
+        width: '2',
         videoId: 'jb0K64SGsfc',
         playerVars: {
             autoplay: 0,
@@ -158,6 +183,7 @@ function onPlayerReady(event) {
         event.target.playVideo();
         isPlaying = true;
         updateMusicIcon();
+        retryPlayForIOS();
     }
 }
 
@@ -364,21 +390,21 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Funciones de los botones
+// NOTA: esta plantilla es de ejemplo. Los botones de abajo (dirección,
+// subir foto, regalos y confirmar asistencia) están dejados sin enlace a
+// propósito. Cuando se personalice para una boda real, agregar aquí el
+// enlace correspondiente (Google Maps, Google Drive, Google Form, etc.).
+
 function openLocation(location) {
-    const addresses = {
-        ceremony: "Parroquia Nuestra Señora de Luján, Av. Pergamino 203, Santo Domingo",
-        celebration: "Salón de fiestas Avril, Av. Los Reartes 12, Santo Domingo"
-    };
-    
-    const address = addresses[location];
-    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
-    window.open(mapsUrl, '_blank');
+    // ENLACE DE EJEMPLO: agregar aquí el enlace real de Google Maps.
+    // Ejemplo de referencia:
+    // const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(direccion)}`;
+    // window.open(mapsUrl, '_blank');
 }
 
-function suggestMusic() {
-    const whatsappMessage = "¡Hola! Me gustaría sugerir una canción para la playlist de la boda de Rafael y Juana 🎵";
-    const whatsappUrl = `https://wa.me/1234567890?text=${encodeURIComponent(whatsappMessage)}`;
-    window.open(whatsappUrl, '_blank');
+function uploadPhoto() {
+    // ENLACE DE EJEMPLO: agregar aquí el enlace real a la carpeta de Google Drive.
+    // window.open('https://drive.google.com/drive/folders/TU_CARPETA', '_blank');
 }
 
 function showDressCode() {
@@ -390,15 +416,12 @@ function showTips() {
 }
 
 function showGifts() {
-    const message = "Hola, me gustaría información sobre los regalos para la boda de Rafael y Juana 🎁";
-    const whatsappUrl = `https://wa.me/1234567890?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+    // ENLACE DE EJEMPLO: agregar aquí el enlace real (WhatsApp, lista de regalos, etc.)
 }
 
 function confirmAttendance() {
-    const message = "¡Hola! Quiero confirmar mi asistencia a la boda de Rafael y Juana el 31 de Diciembre 💒✨";
-    const whatsappUrl = `https://wa.me/1234567890?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+    // ENLACE DE EJEMPLO: agregar aquí el enlace real al Google Form de confirmación.
+    // window.open('https://forms.google.com/TU_FORMULARIO', '_blank');
 }
 
 // Sistema de Toast

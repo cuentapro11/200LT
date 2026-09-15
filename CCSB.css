@@ -226,7 +226,7 @@ html { background-color: #8B5E3C; }
     width: 100%;
     height: 100vh;
     height: 100svh; /* soporta barras de navegador móviles */
-    background-image: url('https://i.ibb.co/VWk9DxJL/boda-imagen.jpg');
+    background-image: url('foto0.jpg');
     background-size: cover;
     background-position: center 25%;
     background-repeat: no-repeat;
@@ -772,7 +772,7 @@ html { background-color: #8B5E3C; }
 .carousel-item {
     flex: 0 0 calc(100% / 3);
     box-sizing: border-box;
-    height: 300px;
+    height: 440px;
     border-radius: 0;
     overflow: hidden;
 }
@@ -832,7 +832,7 @@ html { background-color: #8B5E3C; }
     }
     .carousel-item {
         flex: 0 0 33.333%;
-        height: 320px;
+        height: 400px;
         box-sizing: border-box;
     }
 }
@@ -1071,7 +1071,7 @@ html { background-color: #8B5E3C; }
     }
 
     .carousel-item {
-        height: 200px;
+        height: 420px;
     }
     
     .carousel-btn {
@@ -1104,7 +1104,7 @@ html { background-color: #8B5E3C; }
 
 
     .carousel-item {
-        height: 100px;
+        height: 360px;
     }
     
     .modal-content {
@@ -1328,11 +1328,11 @@ button[class*="carousel"] {
 .hero-text .names { margin-bottom: 1rem; }
 .quote { margin-top: 1.5rem; padding-top: 0.25rem; }
 
-/* Bowtie subtle animation */
-.bowtie-icon svg {
+/* Necktie subtle animation */
+.necktie-icon svg {
     transition: transform 0.3s ease;
 }
-.bowtie-icon:hover svg {
+.necktie-icon:hover svg {
     transform: scale(1.06) rotate(1deg);
 }
 
