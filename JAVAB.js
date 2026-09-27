@@ -408,7 +408,7 @@ function uploadPhoto() {
 }
 
 function showDressCode() {
-    showToast("Dress Code", "Elegante sport - Colores tierra y dorados son bienvenidos 👗");
+    showToast("Código de Vestimenta", "Elegante sport - Colores tierra y dorados son bienvenidos 👗");
 }
 
 function showTips() {
