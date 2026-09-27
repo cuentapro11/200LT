@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Novio & Novia - Invitación de Boda</title>
     <link rel="preload" as="image" href="foto0.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="CCSB.css">
     <script src="https://cdn.lordicon.com/lordicon.js"></script>
     <style>
@@ -137,12 +140,14 @@
         }
 
         /* Íconos personalizados (corbata, subir foto, formulario) */
-        .necktie-icon svg,
+        .bowtie-icon svg,
+        .notes-icon svg,
         .upload-icon svg,
         .form-icon svg {
             transition: transform 0.3s ease;
         }
-        .necktie-icon:hover svg,
+        .bowtie-icon:hover svg,
+        .notes-icon:hover svg,
         .upload-icon:hover svg,
         .form-icon:hover svg {
             transform: scale(1.06) rotate(1deg);
@@ -258,7 +263,7 @@
                             style="width:110px;height:110px">
                         </lord-icon>
                     </div>
-                    <h3 class="event-title">Celebración</h3>
+                    <h3 class="event-title">Recepción</h3>
                     <div class="event-details">
                         <h4>Día</h4>
                         <p>Jueves 31 de Diciembre - 20hs</p>
@@ -322,11 +327,11 @@
             </div>
         </section>
 
-        <!-- Party Information -->
+        <!-- Detalles -->
         <section class="party-section">
             <div class="party-container">
-                <h2 class="section-title">Fiesta</h2>
-                <p class="section-subtitle">Hagamos juntos una fiesta épica. Aquí algunos detalles a tener en cuenta.</p>
+                <h2 class="section-title">Detalles</h2>
+                <p class="section-subtitle">Cada detalle ha sido pensado con cariño. Aquí lo que debes tener en cuenta.</p>
 
                 <div class="party-grid">
                     <div class="party-card">
@@ -342,26 +347,40 @@
                     </div>
 
                     <div class="party-card">
-                        <div class="party-icon modern-icon necktie-icon">
-                            <svg width="110" height="110" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M26 6 L38 6 L34 16 L30 16 Z" fill="#c79816"/>
-                                <path d="M30 16 L34 16 L40 40 L32 58 L24 40 Z" fill="#e2b847"/>
-                                <line x1="32" y1="19" x2="32" y2="52" stroke="#c79816" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+                        <div class="party-icon modern-icon bowtie-icon">
+                            <svg class="icon-bowtie" width="110" height="110" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <defs><linearGradient id="goldBow" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e2b847"/><stop offset="1" stop-color="#c79816"/></linearGradient></defs>
+                            <g stroke="url(#goldBow)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M25 28.5 C19 23 13 18.5 8.5 18.5 C5.8 18.5 4.6 20.5 4.2 23.5 C3.4 29 3.4 35 4.2 40.5 C4.6 43.5 5.8 45.5 8.5 45.5 C13 45.5 19 41 25 35.5" fill="none"/>
+                            <path d="M39 28.5 C45 23 51 18.5 55.5 18.5 C58.2 18.5 59.4 20.5 59.8 23.5 C60.6 29 60.6 35 59.8 40.5 C59.4 43.5 58.2 45.5 55.5 45.5 C51 45.5 45 41 39 35.5" fill="none"/>
+                            <rect x="25.5" y="25" width="13" height="14" rx="3.5" fill="url(#goldBow)"/>
+                            <path d="M11.5 26.5 C15 29 19 30.6 22.5 31.2 M11.5 37.5 C15 35 19 33.4 22.5 32.8" stroke-width="1.8"/>
+                            <path d="M52.5 26.5 C49 29 45 30.6 41.5 31.2 M52.5 37.5 C49 35 45 33.4 41.5 32.8" stroke-width="1.8"/>
+                            </g>
                             </svg>
                         </div>
-                        <h3>Dress Code</h3>
+                        <h3>Código de Vestimenta</h3>
                         <p>Una orientación para tu vestuario</p>
                         <button class="btn-wedding" onclick="showDressCode()">Ver más</button>
                     </div>
 
                     <div class="party-card">
-                        <div class="party-icon modern-icon">
-                            <lord-icon
-                                src="https://cdn.lordicon.com/exymduqj.json"
-                                trigger="loop"
-                                colors="primary:#c79816,secondary:#c79816"
-                                style="width:110px;height:110px">
-                            </lord-icon>
+                        <div class="party-icon modern-icon notes-icon">
+                            <svg class="icon-notes" width="110" height="110" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <defs><linearGradient id="goldNote" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e2b847"/><stop offset="1" stop-color="#c79816"/></linearGradient></defs>
+                            <g stroke="url(#goldNote)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 7 H37 L47 17 V54 A3 3 0 0 1 44 57 H17 A3 3 0 0 1 14 54 V10 A3 3 0 0 1 17 7 Z" fill="none"/>
+                            <path d="M37 7 V14 A3 3 0 0 0 40 17 H47" fill="url(#goldNote)" fill-opacity="0.35"/>
+                            <path d="M20.5 25 H38 M20.5 32 H38 M20.5 39 H33 M20.5 46 H29"/>
+                            <g transform="translate(48 38) rotate(45)">
+                            <path d="M-4.2 -14 H4.2 V9 L0 17 L-4.2 9 Z" class="pencil-mask"/>
+                            <path d="M-4.2 -21 H4.2 A1.5 1.5 0 0 1 5.7 -19.5 V-15 H-5.7 V-19.5 A1.5 1.5 0 0 1 -4.2 -21 Z" fill="url(#goldNote)" stroke="none"/>
+                            <path d="M-4.2 -12 V8.5 M4.2 -12 V8.5 M-4.2 8.5 L0 17 L4.2 8.5 Z M-1.8 13 L0 17 L1.8 13 Z" fill="none"/>
+                            <path d="M-1.8 13 L0 17 L1.8 13 Z" fill="url(#goldNote)"/>
+                            <path d="M0 -10 V6" stroke-width="1.6"/>
+                            </g>
+                            </g>
+                            </svg>
                         </div>
                         <h3>Tips y Notas</h3>
                         <p>Información adicional para tener en cuenta</p>
